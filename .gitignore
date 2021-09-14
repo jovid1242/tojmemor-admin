@@ -23,7 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 .docz
-.eslintcache
 .vscode
+.prettierrc
 
 /react-shell-scripts

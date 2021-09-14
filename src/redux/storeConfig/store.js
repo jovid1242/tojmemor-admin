@@ -1,16 +1,15 @@
-// ** Redux, Thunk & Root Reducer Imports
-import thunk from 'redux-thunk'
-import createDebounce from 'redux-debounced'
-import rootReducer from '../reducers/rootReducer'
-import { createStore, applyMiddleware, compose } from 'redux'
+import { createStore, applyMiddleware, compose } from "redux"
+import createDebounce from "redux-debounced"
+import thunk from "redux-thunk"
+import rootReducer from "../reducers/rootReducer"
 
-// ** init middleware
-const middleware = [thunk, createDebounce()]
+const middlewares = [thunk, createDebounce()]
 
-// ** Dev Tools
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-
-// ** Create store
-const store = createStore(rootReducer, {}, composeEnhancers(applyMiddleware(...middleware)))
+const store = createStore(
+  rootReducer,
+  {},
+  composeEnhancers(applyMiddleware(...middlewares))
+)
 
 export { store }

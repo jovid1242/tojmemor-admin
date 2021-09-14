@@ -1,15 +1,14 @@
-// ** Redux Imports
-import { combineReducers } from 'redux'
-
-// ** Reducers Imports
-import auth from './auth'
-import navbar from './navbar'
-import layout from './layout'
+import { combineReducers } from "redux";
+import customizer from "./customizer/index";
+import auth from "./auth/index";
+import navbar from "./navbar/index";
+import dataList from "./data-list/index";
 
 const rootReducer = combineReducers({
-  auth,
-  navbar,
-  layout
-})
+  customizer: customizer,
+  auth: auth,
+  navbar: navbar,
+  dataList: dataList,
+});
 
-export default rootReducer
+export default rootReducer;

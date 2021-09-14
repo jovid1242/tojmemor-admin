@@ -1,0 +1,6 @@
+.img__news {
+  width: 80px;
+  height: 80px;
+  border-radius: 14px;
+  object-fit: cover;
+}
