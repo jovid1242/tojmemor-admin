@@ -9,38 +9,26 @@ import {
     CardTitle,
     CardBody,
     FormGroup,
-    Label
-} from "reactstrap"
-import {
-    EditorState,
-    convertToRaw,
-    ContentState
-} from "draft-js"
-import draftToHtml from 'draftjs-to-html';
-import { Editor } from "react-draft-wysiwyg"
-import {
-    Formik,
-    Field,
-    Form
-} from "formik"
-import * as Yup from "yup"
-import { useDropzone } from "react-dropzone"
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
-import "../../../../../assets/scss/plugins/extensions/editor.scss"
-import "../../../../../assets/scss/plugins/extensions/dropzone.scss"
+    Label,
+} from 'reactstrap'
+import { EditorState, convertToRaw, ContentState } from 'draft-js'
+import draftToHtml from 'draftjs-to-html'
+import { Editor } from 'react-draft-wysiwyg'
+import { Formik, Field, Form } from 'formik'
+import * as Yup from 'yup'
+import { useDropzone } from 'react-dropzone'
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import '../../../../../assets/scss/plugins/extensions/editor.scss'
+import '../../../../../assets/scss/plugins/extensions/dropzone.scss'
 import http from '../../../../../http'
 import FormData from 'form-data'
-import { toast } from "react-toastify"
-import htmlToDraft from 'html-to-draftjs';
+import { toast } from 'react-toastify'
+import htmlToDraft from 'html-to-draftjs'
 
 const formSchema = Yup.object().shape({
-    required: Yup.string().required("Required"),
-    minlength: Yup.string()
-        .min(4, "Too Short!")
-        .required("Required"),
-    maxlength: Yup.string()
-        .max(5, "Too Long!")
-        .required("Required")
+    required: Yup.string().required('Required'),
+    minlength: Yup.string().min(4, 'Too Short!').required('Required'),
+    maxlength: Yup.string().max(5, 'Too Long!').required('Required'),
 })
 
 export default function ModalEdit({ show, closeModalEdit, editNews, news }) {
@@ -50,29 +38,31 @@ export default function ModalEdit({ show, closeModalEdit, editNews, news }) {
     const [files, setFiles] = useState([])
     // const [title, setTitle] = useState("")
     const [edit, setEdit] = useState({
-        editorState: EditorState.createEmpty()
+        editorState: EditorState.createEmpty(),
     })
     const [preloadImg, setpreloadImg] = useState({ image: null })
 
     const [imageFile, setImageFile] = useState({
-        file: null
+        file: null,
     })
 
     const [post, setPost] = useState({
         id: null,
         title: null,
         file: null,
-        text: null
+        text: null,
     })
 
     useEffect(() => {
-        const html = String(news.text);
-        const contentBlock = htmlToDraft(html);
+        const html = String(news.text)
+        const contentBlock = htmlToDraft(html)
         if (contentBlock) {
-            const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-            const editorState = EditorState.createWithContent(contentState);
+            const contentState = ContentState.createFromBlockArray(
+                contentBlock.contentBlocks
+            )
+            const editorState = EditorState.createWithContent(contentState)
             setEdit({
-                editorState
+                editorState,
             })
         }
 
@@ -80,70 +70,76 @@ export default function ModalEdit({ show, closeModalEdit, editNews, news }) {
             id: news.id,
             title: news.title,
             text: news.text,
-            file: news.img
+            data: news.data,
+            file: news.image,
         })
-        setpreloadImg({image: news.img})
+        setpreloadImg({ image: news.image })
     }, [news])
 
     const toggleModal = () => {
         if (show) {
             closeModalEdit(false)
-        } closeModalEdit(true)
+        }
+        closeModalEdit(true)
     }
     const handleFileInput = (e) => {
-        setPost({ ...post, file: e.target.files[0] });
+        setPost({ ...post, file: e.target.files[0] })
         if (e.target.files && e.target.files[0]) {
-            let img = e.target.files[0];
+            let img = e.target.files[0]
             setpreloadImg({
-                image: URL.createObjectURL(img)
-            });
+                image: URL.createObjectURL(img),
+            })
         }
     }
 
-    const onEditorStateChange = editorState => {
+    const onEditorStateChange = (editorState) => {
         setEdit({
-            editorState
+            editorState,
         })
 
-        setPost({ ...post, text: draftToHtml(convertToRaw(edit.editorState.getCurrentContent())) })
+        setPost({
+            ...post,
+            text: draftToHtml(
+                convertToRaw(edit.editorState.getCurrentContent())
+            ),
+        })
     }
 
     const { getRootProps, getInputProps } = useDropzone({
-        accept: "image/*",
-        onDrop: acceptedFiles => {
+        accept: 'image/*',
+        onDrop: (acceptedFiles) => {
             setFiles(
-                acceptedFiles.map(file =>
+                acceptedFiles.map((file) =>
                     Object.assign(file, {
-                        preview: URL.createObjectURL(file)
+                        preview: URL.createObjectURL(file),
                     })
                 )
             )
-        }
+        },
     })
 
     const submitForm = (e) => {
         e.preventDefault()
         const data = new FormData()
-        data.append('title', post.title);
-        data.append('text', post.text);
-        data.append('file', post.file);
+        data.append('title', post.title)
+        data.append('text', post.text)
+        data.append('data', post.data)
+        data.append('image', post.file)
         // console.log(post);
-        console.log(post);
+        console.log(post)
         // editNews(post)
-        http.put(`/update_news/${news.id}`, data)
+        http.put(`/news/update/${news.id}`, data)
             .then((response) => {
                 toggleModal()
                 editNews(post, preloadImg.image)
                 notifySuccess('Новость успешно изменено!')
-                // console.log(response.data);
-                // setPost(response.data.news)
             })
             .catch(function (errors) {
                 notifyError(`О нет, ${errors.message}`)
             })
     }
 
-    const thumbs = files.map(file => (
+    const thumbs = files.map((file) => (
         <div className="dz-thumb" key={file.name}>
             <div className="dz-thumb-inner">
                 <img src={file.preview} className="dz-img" alt={file.name} />
@@ -154,7 +150,7 @@ export default function ModalEdit({ show, closeModalEdit, editNews, news }) {
     useEffect(
         () => () => {
             // Make sure to revoke the data uris to avoid memory leaks
-            files.forEach(file => URL.revokeObjectURL(file.preview))
+            files.forEach((file) => URL.revokeObjectURL(file.preview))
         },
         [files]
     )
@@ -167,58 +163,109 @@ export default function ModalEdit({ show, closeModalEdit, editNews, news }) {
                 className="modal-dialog-centered modal-lg"
             >
                 <ModalHeader toggle={toggleModal} className="bg-primary">
-                Редактирование новости
+                    Редактирование новости
                 </ModalHeader>
                 <ModalBody className="modal-dialog-centered">
                     <Formik
                         initialValues={{
-                            required: "",
-                            name: "",
-                            date: "",
-                            minlength: "",
-                            maxlength: ""
+                            required: '',
+                            name: '',
+                            date: '',
+                            minlength: '',
+                            maxlength: '',
                         }}
                         validationSchema={formSchema}
                     >
                         {({ errors, touched }) => (
                             <Form className="w-100" onSubmit={submitForm}>
-
                                 <Card>
                                     <CardBody className="rdt_Wrapper">
                                         <FormGroup className="my-3">
-                                            <Label for="required">Заголовок</Label>
+                                            <Label for="required">
+                                                Заголовок
+                                            </Label>
                                             <Field
                                                 name="title"
                                                 id="required"
                                                 value={post.title}
-                                                onChange={e => setPost({ ...post, title: e.target.value })}
-                                                className={`form-control ${errors.required &&
+                                                onChange={(e) =>
+                                                    setPost({
+                                                        ...post,
+                                                        title: e.target.value,
+                                                    })
+                                                }
+                                                className={`form-control ${
+                                                    errors.required &&
                                                     touched.required &&
-                                                    "is-invalid"}`}
+                                                    'is-invalid'
+                                                }`}
                                             />
-                                            {errors.required && touched.required ? (
-                                                <div className="invalid-tooltip mt-25">{errors.required}</div>
+                                            {errors.required &&
+                                            touched.required ? (
+                                                <div className="invalid-tooltip mt-25">
+                                                    {errors.required}
+                                                </div>
                                             ) : null}
                                         </FormGroup>
-
+                                        <FormGroup className="my-3">
+                                            <Label for="required">
+                                                Дата создания
+                                            </Label>
+                                            <Field
+                                                name="title"
+                                                id="required"
+                                                value={post.data}
+                                                onChange={(e) =>
+                                                    setPost({
+                                                        ...post,
+                                                        data: e.target.value,
+                                                    })
+                                                }
+                                                className={`form-control ${
+                                                    errors.required &&
+                                                    touched.required &&
+                                                    'is-invalid'
+                                                }`}
+                                            />
+                                            {errors.required &&
+                                            touched.required ? (
+                                                <div className="invalid-tooltip mt-25">
+                                                    {errors.required}
+                                                </div>
+                                            ) : null}
+                                        </FormGroup>
                                     </CardBody>
                                 </Card>
                                 <Card>
                                     <CardBody className="rdt_Wrapper">
                                         <section>
-                                            <div {...getRootProps({ className: "dropzone" })}>
-                                                <input                                                    
-                                                    {...getInputProps()} 
+                                            <div
+                                                {...getRootProps({
+                                                    className: 'dropzone',
+                                                })}
+                                            >
+                                                <input
+                                                    {...getInputProps()}
                                                     onChange={handleFileInput}
-                                                    />
+                                                />
                                                 <p className="mx-1">
-                                                    Перетащите сюда файл или щелкните, чтобы выбрать файл
-                                            </p>
+                                                    Перетащите сюда файл или
+                                                    щелкните, чтобы выбрать файл
+                                                </p>
                                             </div>
                                             <aside className="thumb-container">
                                                 <div className="dz-thumb">
                                                     <div className="dz-thumb-inner">
-                                                        {preloadImg.image !== null ? <img src={preloadImg.image} className="dz-img" alt="dd" /> : null}
+                                                        {preloadImg.image !==
+                                                        null ? (
+                                                            <img
+                                                                src={
+                                                                    preloadImg.image
+                                                                }
+                                                                className="dz-img"
+                                                                alt="dd"
+                                                            />
+                                                        ) : null}
                                                     </div>
                                                 </div>
                                             </aside>
@@ -231,11 +278,17 @@ export default function ModalEdit({ show, closeModalEdit, editNews, news }) {
                                             editorState={edit.editorState}
                                             wrapperClassName="demo-wrapper"
                                             editorClassName="demo-editor"
-                                            onEditorStateChange={onEditorStateChange}
+                                            onEditorStateChange={
+                                                onEditorStateChange
+                                            }
                                         />
                                     </CardBody>
                                 </Card>
-                                <Button.Ripple color="primary" type="submit" className="mt-2" >
+                                <Button.Ripple
+                                    color="primary"
+                                    type="submit"
+                                    className="mt-2"
+                                >
                                     Изменить
                                 </Button.Ripple>
                             </Form>
@@ -243,7 +296,6 @@ export default function ModalEdit({ show, closeModalEdit, editNews, news }) {
                     </Formik>
                 </ModalBody>
             </Modal>
-
         </>
     )
 }

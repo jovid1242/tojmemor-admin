@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import {
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-} from "reactstrap"
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import http from '../../../../../http'
-import { toast } from "react-toastify"
+import { toast } from 'react-toastify'
 
 export default function ModalWarning({ show, closeModal, id, deleteNews }) {
     const notifyWarning = (txt) => toast.warning(txt)
@@ -15,16 +9,17 @@ export default function ModalWarning({ show, closeModal, id, deleteNews }) {
     const toggleModal = () => {
         if (show) {
             closeModal(false)
-        } closeModal(true)
+        }
+        closeModal(true)
     }
     const submitForm = (e) => {
         deleteNews(id)
-        http.delete(`/news-delete/${id}`)
+        http.delete(`/news/delete/${id}`)
             .then((res) => {
                 notifySuccess('Новость успешно удален!')
             })
             .catch(function (errors) {
-                notifyWarning(`Ошибка , ${errors.message}`);
+                notifyWarning(`Ошибка , ${errors.message}`)
             })
     }
     return (
@@ -35,13 +30,19 @@ export default function ModalWarning({ show, closeModal, id, deleteNews }) {
                 className="modal-dialog-centered"
             >
                 <ModalHeader toggle={toggleModal} className="bg-danger">
-                    Внимание 
+                    Внимание
                 </ModalHeader>
                 <ModalBody className="modal-dialog-centered">
-                Вы уверены, что хотите удалить эту новость?
+                    Вы уверены, что хотите удалить эту новость?
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="danger" onClick={(e) => { submitForm(e); toggleModal() }} >
+                    <Button
+                        color="danger"
+                        onClick={(e) => {
+                            submitForm(e)
+                            toggleModal()
+                        }}
+                    >
                         Удалить
                     </Button>
                 </ModalFooter>

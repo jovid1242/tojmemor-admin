@@ -1,13 +1,7 @@
 import React from 'react'
-import {
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-} from "reactstrap"
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import http from '../../../../../http'
-import { toast } from "react-toastify"
+import { toast } from 'react-toastify'
 
 export default function ModalWarning({ show, closeModal, id, deleteProjects }) {
     const notifyWarning = (txt) => toast.warning(txt)
@@ -15,11 +9,12 @@ export default function ModalWarning({ show, closeModal, id, deleteProjects }) {
     const toggleModal = () => {
         if (show) {
             closeModal(false)
-        } closeModal(true)
+        }
+        closeModal(true)
     }
     const submitForm = (e) => {
         deleteProjects(id)
-        http.delete(`del_project/${id}`)
+        http.delete(`projects/delete/${id}`)
             .then((res) => {
                 notifySuccess('Проект успешно удален!')
             })
@@ -41,7 +36,13 @@ export default function ModalWarning({ show, closeModal, id, deleteProjects }) {
                     Вы уверены, что хотите удалить этот проект?
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="danger" onClick={(e) => { submitForm(e); toggleModal() }} >
+                    <Button
+                        color="danger"
+                        onClick={(e) => {
+                            submitForm(e)
+                            toggleModal()
+                        }}
+                    >
                         Удалить
                     </Button>
                 </ModalFooter>
