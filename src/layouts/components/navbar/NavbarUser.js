@@ -397,7 +397,7 @@ class NavbarUser extends React.PureComponent {
                         </div>
                         <span data-tour="user">
                             <img
-                                // src={user.img}
+                                src={user.image}
                                 className="round"
                                 height="40"
                                 width="40"

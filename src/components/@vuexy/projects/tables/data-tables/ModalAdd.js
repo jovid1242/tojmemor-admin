@@ -35,9 +35,7 @@ export default function ModalAdd({ show, closeModalAdd, addProjects }) {
     const notifyError = (txt) => toast.error(txt)
     const [files, setFiles] = useState([])
     const [preloadImg, setpreloadImg] = useState({ image: null })
-    const [imageFile, setImageFile] = useState({
-        file: null,
-    })
+
     const [post, setPost] = useState({
         title: null,
         file: null,
@@ -77,6 +75,7 @@ export default function ModalAdd({ show, closeModalAdd, addProjects }) {
             ),
         })
     }
+
     const { getRootProps, getInputProps } = useDropzone({
         accept: 'image/*',
         onDrop: (acceptedFiles) => {
@@ -159,32 +158,6 @@ export default function ModalAdd({ show, closeModalAdd, addProjects }) {
                                                     setPost({
                                                         ...post,
                                                         title: e.target.value,
-                                                    })
-                                                }
-                                                className={`form-control ${
-                                                    errors.required &&
-                                                    touched.required &&
-                                                    'is-invalid'
-                                                }`}
-                                            />
-                                            {errors.required &&
-                                            touched.required ? (
-                                                <div className="invalid-tooltip mt-25">
-                                                    {errors.required}
-                                                </div>
-                                            ) : null}
-                                        </FormGroup>
-                                        <FormGroup className="my-3">
-                                            <Label for="required">
-                                                Описание
-                                            </Label>
-                                            <Field
-                                                name="desctiption"
-                                                id="required"
-                                                onChange={(e) =>
-                                                    setPost({
-                                                        ...post,
-                                                        text: e.target.value,
                                                     })
                                                 }
                                                 className={`form-control ${

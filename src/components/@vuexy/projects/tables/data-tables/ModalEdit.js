@@ -205,33 +205,6 @@ export default function ModalEdit({
                                             ) : null}
                                         </FormGroup>
                                         <FormGroup className="my-3">
-                                            <Label for="required">
-                                                Описание
-                                            </Label>
-                                            <Field
-                                                name="desctiption"
-                                                id="required"
-                                                value={post.text}
-                                                onChange={(e) =>
-                                                    setPost({
-                                                        ...post,
-                                                        text: e.target.value,
-                                                    })
-                                                }
-                                                className={`form-control ${
-                                                    errors.required &&
-                                                    touched.required &&
-                                                    'is-invalid'
-                                                }`}
-                                            />
-                                            {errors.required &&
-                                            touched.required ? (
-                                                <div className="invalid-tooltip mt-25">
-                                                    {errors.required}
-                                                </div>
-                                            ) : null}
-                                        </FormGroup>
-                                        <FormGroup className="my-3">
                                             <Label for="required">Ссылка</Label>
                                             <Field
                                                 name="url"
