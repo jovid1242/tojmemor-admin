@@ -17,6 +17,7 @@ const lStorage = {
             activated: state.data.user.activated,
             name: state.data.user.name,
             status: state.data.user.status,
+            image: state.data.user.image,
             token: state.data.accessToken,
         })
         localStorage.setItem('user', logUserData)
