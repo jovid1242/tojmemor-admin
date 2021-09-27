@@ -67,15 +67,15 @@ const horizontalMenuConfig = [
         permissions: ['admin', 'editor'],
         navLink: '/pages/slider',
     },
-    // {
-    //   id: "stock",
-    //   title: "Заявки",
-    //   type: "item",
-    //   icon: <Icon.MessageSquare size={20} />,
-    //   permissions: ["admin", "editor"],
-    //   navLink: "/pages/stock",
-    //   role: ['admin' , 'manager']
-    // },
+    {
+        id: 'application',
+        title: 'Заявки',
+        type: 'item',
+        icon: <Icon.MessageSquare size={20} />,
+        permissions: ['admin', 'editor'],
+        navLink: '/pages/application',
+        role: ['admin', 'manager'],
+    },
     {
         id: 'sale',
         title: 'Акции',
