@@ -85,6 +85,15 @@ const horizontalMenuConfig = [
         navLink: '/pages/sale',
         role: ['admin'],
     },
+    {
+        id: 'team',
+        title: 'Сотрудники',
+        type: 'item',
+        icon: <Icon.Coffee size={20} />,
+        permissions: ['admin', 'editor'],
+        navLink: '/pages/team',
+        role: ['admin'],
+    },
 ]
 
 let filterNavigationConfig = horizontalMenuConfig.filter((el) => {

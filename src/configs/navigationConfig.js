@@ -56,15 +56,15 @@ const navigationConfig = [
         navLink: '/pages/users',
         role: ['admin'],
     },
-    // {
-    //   id: "team",
-    //   title: "Сотрудники",
-    //   type: "item",
-    //   icon: <Icon.Coffee size={20} />,
-    //   permissions: ["admin", "editor"],
-    //   navLink: "/pages/team",
-    //   role: ['admin']
-    // },
+    {
+        id: 'team',
+        title: 'Сотрудники',
+        type: 'item',
+        icon: <Icon.Coffee size={20} />,
+        permissions: ['admin', 'editor'],
+        navLink: '/pages/team',
+        role: ['admin'],
+    },
     // {
     //   id: "career",
     //   title: "Карьера",
