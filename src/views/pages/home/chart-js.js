@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react"
-import { Card, CardHeader, CardTitle, CardBody } from "reactstrap"
-import { Line } from "react-chartjs-2"
+import React, { useState, useEffect } from 'react'
+import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
+import { Line } from 'react-chartjs-2'
 import http from '../../../http'
 
 export default function LineCharts() {
     const [datas, setDatas] = useState([])
 
     useEffect(() => {
-        http.get(`index.wsgi/analytics/`)
+        http.get(`/analitics`)
             .then((res) => {
                 setDatas(res.data)
             })
@@ -16,29 +16,29 @@ export default function LineCharts() {
             })
     }, [])
 
-    const $primary = "#1b1b1b",
-        $success = "#28C76F",
-        $danger = "#EA5455",
-        $warning = "#FF9F43",
-        $label_color = "#1E1E1E",
-        grid_line_color = "#dae1e7"
+    const $primary = '#1b1b1b',
+        $success = '#28C76F',
+        $danger = '#EA5455',
+        $warning = '#FF9F43',
+        $label_color = '#1E1E1E',
+        grid_line_color = '#dae1e7'
 
     const data = {
-        labels: datas.labels,
+        labels: datas.arrMonth,
         datasets: [
             {
-                label: "Заявки",
-                data: datas.datasets,
-                borderColor: $primary
-            }
-        ]
+                label: 'Заявки',
+                data: datas.arrData,
+                borderColor: $primary,
+            },
+        ],
     }
 
     const options = {
         maintainAspectRatio: false,
         responsive: true,
         legend: {
-            position: "top"
+            position: 'top',
         },
 
         scales: {
@@ -46,29 +46,29 @@ export default function LineCharts() {
                 {
                     display: true,
                     gridLines: {
-                        color: grid_line_color
+                        color: grid_line_color,
                     },
                     scaleLabel: {
-                        display: true
-                    }
-                }
+                        display: true,
+                    },
+                },
             ],
             yAxes: [
                 {
                     display: true,
                     gridLines: {
-                        color: grid_line_color
+                        color: grid_line_color,
                     },
                     scaleLabel: {
-                        display: true
-                    }
-                }
-            ]
+                        display: true,
+                    },
+                },
+            ],
         },
         title: {
             display: true,
-            text: "Количество полученных заявок (в месяц)"
-        }
+            text: 'Количество полученных заявок (в месяц)',
+        },
     }
 
     return (
@@ -82,4 +82,3 @@ export default function LineCharts() {
         </Card>
     )
 }
-
