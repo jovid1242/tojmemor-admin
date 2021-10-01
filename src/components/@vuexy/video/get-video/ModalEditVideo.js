@@ -94,7 +94,7 @@ export default function ModalEditVideo({
         data.append('text', post.text)
         data.append('urlVideo', post.url)
         data.append('image', post.file)
-        http.put(`update_video/${video.id}`, data)
+        http.put(`/video/update/${video.id}`, data)
             .then((response) => {
                 editVideo(post, preloadImg.image)
                 notifySuccess('Видео успешно изменено!')
@@ -153,7 +153,7 @@ export default function ModalEditVideo({
                                             <Field
                                                 name="title"
                                                 id="required"
-                                                value={post.url}
+                                                value={post.title}
                                                 onChange={(e) =>
                                                     setPost({
                                                         ...post,
@@ -180,7 +180,7 @@ export default function ModalEditVideo({
                                             <Field
                                                 name="title"
                                                 id="required"
-                                                value={post.url}
+                                                value={post.text}
                                                 onChange={(e) =>
                                                     setPost({
                                                         ...post,
@@ -207,7 +207,7 @@ export default function ModalEditVideo({
                                             <Field
                                                 name="url"
                                                 id="required"
-                                                value={post.url}
+                                                value={post.urlVideo}
                                                 onChange={(e) =>
                                                     setPost({
                                                         ...post,

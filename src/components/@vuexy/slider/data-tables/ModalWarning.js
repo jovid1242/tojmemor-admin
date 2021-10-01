@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import {
-    Button,
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-} from "reactstrap"
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import http from '../../../../http'
-import { toast } from "react-toastify"
+import { toast } from 'react-toastify'
 
 export default function ModalWarning({ show, closeModal, id, deleteSlider }) {
     const notifyWarning = (txt) => toast.warning(txt)
@@ -15,17 +9,17 @@ export default function ModalWarning({ show, closeModal, id, deleteSlider }) {
     const toggleModal = () => {
         if (show) {
             closeModal(false)
-        } closeModal(true)
+        }
+        closeModal(true)
     }
     const submitForm = (e) => {
-        http.delete(`/delete_slider/${id}`)
+        http.delete(`/slider/delete/${id}`)
             .then((res) => {
-                
-        deleteSlider(id)
+                deleteSlider(id)
                 notifySuccess('Слайдер успешно удален!')
             })
             .catch(function (errors) {
-                notifyWarning(`Ошибка , ${errors.message}`);
+                notifyWarning(`Ошибка , ${errors.message}`)
             })
     }
     return (
@@ -42,7 +36,13 @@ export default function ModalWarning({ show, closeModal, id, deleteSlider }) {
                     Вы уверены, что хотите удалить этот слайдер?
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="danger" onClick={(e) => { submitForm(e); toggleModal() }} >
+                    <Button
+                        color="danger"
+                        onClick={(e) => {
+                            submitForm(e)
+                            toggleModal()
+                        }}
+                    >
                         Удалить
                     </Button>
                 </ModalFooter>

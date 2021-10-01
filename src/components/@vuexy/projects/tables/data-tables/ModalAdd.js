@@ -35,9 +35,7 @@ export default function ModalAdd({ show, closeModalAdd, addProjects }) {
     const notifyError = (txt) => toast.error(txt)
     const [files, setFiles] = useState([])
     const [preloadImg, setpreloadImg] = useState({ image: null })
-    const [imageFile, setImageFile] = useState({
-        file: null,
-    })
+
     const [post, setPost] = useState({
         title: null,
         file: null,
@@ -77,6 +75,7 @@ export default function ModalAdd({ show, closeModalAdd, addProjects }) {
             ),
         })
     }
+
     const { getRootProps, getInputProps } = useDropzone({
         accept: 'image/*',
         onDrop: (acceptedFiles) => {

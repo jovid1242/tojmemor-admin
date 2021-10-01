@@ -51,7 +51,11 @@ export default function Index() {
         post[index].title = el.title
         post[index].text = el.text
         post[index].urlVideo = el.url
-        post[index].image = img
+        if (img === null) {
+            post[index].image = el.file
+        } else {
+            post[index].image = img
+        }
     }
 
     const deleteProjects = (id) => {
