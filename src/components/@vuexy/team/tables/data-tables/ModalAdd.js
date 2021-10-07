@@ -125,12 +125,13 @@ export default function ModalAdd({ show, closeModalAdd, addTeam }) {
                                         <FormGroup className="my-3">
                                             <Label for="required">Имя</Label>
                                             <Field
-                                                name="name"
+                                                name="text"
                                                 id="required"
                                                 onChange={(e) =>
                                                     setPost({
                                                         ...post,
-                                                        name: e.target.value,
+                                                        name:
+                                                            e.target.value,
                                                     })
                                                 }
                                                 className={`form-control ${
@@ -139,12 +140,6 @@ export default function ModalAdd({ show, closeModalAdd, addTeam }) {
                                                     'is-invalid'
                                                 }`}
                                             />
-                                            {errors.required &&
-                                            touched.required ? (
-                                                <div className="invalid-tooltip mt-25">
-                                                    {errors.required}
-                                                </div>
-                                            ) : null}
                                         </FormGroup>
                                         <FormGroup className="my-3">
                                             <Label for="required">
