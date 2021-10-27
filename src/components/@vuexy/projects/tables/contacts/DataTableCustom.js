@@ -33,8 +33,8 @@ export default function Index() {
     const [idNews, setIdNews] = useState()
 
     useEffect(() => {
-        http.get('/pr_slider').then((res) => {
-            setPost(res.data.pr_sliders)
+        http.get('/pr_contact').then((res) => {
+            setPost(res.data.pr_layouts)
         })
         http.get('/projects').then((res) => {
             setProjects(res.data.projects)
@@ -45,24 +45,21 @@ export default function Index() {
         setModal(false)
     }
 
-    const addProjects = (project_id, image) => {
-        setPost((prevState) => [...prevState, { project_id, image }])
+    const addProjects = (el) => {
+        setPost((prevState) => [...prevState, { el }])
     }
 
     const handleSearchValue = (e) => {
         setSearchPost(e.target.value)
     }
 
-    const editProjects = (el, file) => {
+    const editProjects = (el) => {
         let index = post.findIndex((element) => element.id === el.id)
-        post[index].title = el.title
-        post[index].text = el.text
+        post[index].project_id = el.project_id
+        post[index].adress = el.adress
+        post[index].phone = el.phone
+        post[index].email = el.email
         post[index].url = el.url
-        if (file === null) {
-            post[index].image = el.file
-        } else {
-            post[index].image = file
-        }
     }
 
     const deleteProjects = (id) => {
@@ -109,7 +106,7 @@ export default function Index() {
                     projects={projects}
                 />
                 <CardHeader>
-                    <CardTitle>Слайдер</CardTitle>
+                    <CardTitle>Контакты</CardTitle>
                 </CardHeader>
                 <CardBody className="rdt_Wrapper">
                     <Tst />
@@ -138,7 +135,10 @@ export default function Index() {
                             <tr>
                                 <th>№</th>
                                 <th>Проекты</th>
-                                <th>Картинка</th>
+                                <th>Адрес</th>
+                                <th>Телефон</th>
+                                <th>E-mail</th>
+                                <th>Ссылка на карту</th>
                                 <th>Действия</th>
                             </tr>
                         </thead>
@@ -148,13 +148,13 @@ export default function Index() {
                                     <tr key={index}>
                                         <th scope="row">{index + 1}</th>
                                         <td>{findProject(el)}</td>
+                                        <td>{el.adress} </td>
+                                        <td>{el.phone} </td>
+                                        <td>{el.email} </td>
                                         <td>
-                                            {' '}
-                                            <img
-                                                src={el.image}
-                                                alt="img-news"
-                                                className="img__news"
-                                            />{' '}
+                                            <a href={el.url} target="_blanck">
+                                                {el.url}
+                                            </a>
                                         </td>
                                         <td>
                                             <div className="d-flex">
