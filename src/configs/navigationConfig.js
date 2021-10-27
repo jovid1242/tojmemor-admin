@@ -51,7 +51,7 @@ const navigationConfig = [
                 type: 'item',
                 icon: <Icon.Layers size={20} />,
                 permissions: ['admin', 'editor'],
-                navLink: '/pages/slider2',
+                navLink: '/pages/pr_layouts',
                 role: ['admin'],
             },
             {
