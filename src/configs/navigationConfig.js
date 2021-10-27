@@ -60,7 +60,7 @@ const navigationConfig = [
                 type: 'item',
                 icon: <Icon.Award size={20} />,
                 permissions: ['admin', 'editor'],
-                navLink: '/pages/slider22',
+                navLink: '/pages/pr_advantages',
                 role: ['admin'],
             },
             {
