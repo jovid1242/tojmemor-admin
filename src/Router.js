@@ -23,6 +23,7 @@ const Slider = lazy(() => import('./views/pages/Slider'))
 const Stock = lazy(() => import('./views/pages/Stock'))
 const Login = lazy(() => import('./views/pages/authentication/login/Login'))
 const Layouts = lazy(() => import('./views/pages/Layouts'))
+const Pr_sliders = lazy(() => import('./views/pages/Pr_sliders'))
 const error404 = lazy(() => import('./views/pages/404'))
 const isAuthenticated = () => {
     const profile = JSON.parse(localStorage.getItem('user'))
@@ -96,6 +97,7 @@ class AppRouter extends React.Component {
                     <AppRoute path="/pages/video" component={Video} />
                     <AppRoute path="/pages/career" component={Career} />
                     <AppRoute path="/pages/career" component={Career} />
+                    <AppRoute path="/pages/pr_sliders" component={Pr_sliders} />
                     <AppRoute path="/pages/profile" component={UserProfile} />
                     <AppRoute
                         path="/pages/profile-edit"

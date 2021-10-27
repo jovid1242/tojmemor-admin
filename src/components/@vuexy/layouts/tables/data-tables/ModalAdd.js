@@ -10,37 +10,25 @@ import {
     CardBody,
     FormGroup,
     Label,
-    CustomInput
-} from "reactstrap"
-import {
-    EditorState,
-    convertToRaw,
-    ContentState
-} from "draft-js"
-import draftToHtml from 'draftjs-to-html';
-import { Editor } from "react-draft-wysiwyg"
-import {
-    Formik,
-    Field,
-    Form
-} from "formik"
-import * as Yup from "yup"
-import { useDropzone } from "react-dropzone"
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
-import "../../../../../assets/scss/plugins/extensions/editor.scss"
-import "../../../../../assets/scss/plugins/extensions/dropzone.scss"
+    CustomInput,
+} from 'reactstrap'
+import { EditorState, convertToRaw, ContentState } from 'draft-js'
+import draftToHtml from 'draftjs-to-html'
+import { Editor } from 'react-draft-wysiwyg'
+import { Formik, Field, Form } from 'formik'
+import * as Yup from 'yup'
+import { useDropzone } from 'react-dropzone'
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import '../../../../../assets/scss/plugins/extensions/editor.scss'
+import '../../../../../assets/scss/plugins/extensions/dropzone.scss'
 import http from '../../../../../http'
 import FormData from 'form-data'
-import { toast } from "react-toastify"
+import { toast } from 'react-toastify'
 
 const formSchema = Yup.object().shape({
-    required: Yup.string().required("Required"),
-    minlength: Yup.string()
-        .min(4, "Too Short!")
-        .required("Required"),
-    maxlength: Yup.string()
-        .max(5, "Too Long!")
-        .required("Required")
+    required: Yup.string().required('Required'),
+    minlength: Yup.string().min(4, 'Too Short!').required('Required'),
+    maxlength: Yup.string().max(5, 'Too Long!').required('Required'),
 })
 
 export default function ModalAdd({ show, closeModalAdd, addLayout }) {
@@ -52,7 +40,7 @@ export default function ModalAdd({ show, closeModalAdd, addLayout }) {
     const [title, setTitle] = useState([])
     const [preloadImg, setpreloadImg] = useState({ image: null })
     const [imageFile, setImageFile] = useState({
-        file: null
+        file: null,
     })
     const [post, setPost] = useState({
         file: null,
@@ -60,90 +48,95 @@ export default function ModalAdd({ show, closeModalAdd, addLayout }) {
         square: null,
         rooms: null,
         residences: null,
-        paragraph: null
+        paragraph: null,
     })
 
     const toggleModal = () => {
         if (show) {
             closeModalAdd(false)
-        } closeModalAdd(true)
+        }
+        closeModalAdd(true)
     }
 
     const handleInput = (e) => {
-        const name = e.target.name;
-        const value = e.target.value;
+        const name = e.target.name
+        const value = e.target.value
         const data = post
         data[name] = value
-        setPost(data);
+        setPost(data)
     }
-    console.log('post', post);
+    console.log('post', post)
 
     const handleFileInput = (e) => {
-        setPost({ ...post, file: e.target.files[0] });
+        setPost({ ...post, file: e.target.files[0] })
         if (e.target.files && e.target.files[0]) {
-            let img = e.target.files[0];
+            let img = e.target.files[0]
             setpreloadImg({
-                image: URL.createObjectURL(img)
-            });
+                image: URL.createObjectURL(img),
+            })
         }
     }
 
     const { getRootProps, getInputProps } = useDropzone({
-        accept: "image/*",
-        onDrop: acceptedFiles => {
+        accept: 'image/*',
+        onDrop: (acceptedFiles) => {
             setFiles(
-                acceptedFiles.map(file =>
+                acceptedFiles.map((file) =>
                     Object.assign(file, {
-                        preview: URL.createObjectURL(file)
+                        preview: URL.createObjectURL(file),
                     })
                 )
             )
-        }
+        },
     })
 
-
     useEffect(() => {
-        http.get(`get_residences`)
-            .then((response) => {
-                setGroupRes(response.data)
-            })
+        http.get(`get_residences`).then((response) => {
+            setGroupRes(response.data)
+        })
     }, [])
 
     useEffect(() => {
-        http.get(`get_layoutcategory/${post.residences}`)
-            .then((response) => {
-                setLayoutcategory(response.data)
-            })
+        http.get(`get_layoutcategory/${post.residences}`).then((response) => {
+            setLayoutcategory(response.data)
+        })
     }, [post.residences])
 
     const submitForm = (e) => {
         e.preventDefault()
         const data = new FormData()
-        data.append('floor', post.floor);
-        data.append('square', post.square);
-        data.append('rooms', post.rooms);
-        data.append('residences', post.residences);
-        data.append('file', post.file);
-        data.append('layoutcategory', post.paragraph);
+        data.append('floor', post.floor)
+        data.append('square', post.square)
+        data.append('rooms', post.rooms)
+        data.append('residences', post.residences)
+        data.append('file', post.file)
+        data.append('layoutcategory', post.paragraph)
         // console.log(post);
         // addLayout(post)
         http.post('/create_layout ', data)
             .then((response) => {
-                addLayout(post.floor, post.square, post.rooms, post.residences, post.paragraph, preloadImg.image)
+                addLayout(
+                    post.floor,
+                    post.square,
+                    post.rooms,
+                    post.residences,
+                    post.paragraph,
+                    preloadImg.image
+                )
                 toggleModal()
                 notifySuccess(' Планировка успешно добавлена!')
                 // console.log(response.data);
                 // setPost(response.data.news)
             })
             .catch(function (errors) {
-                notifyError(`О боже ошибка , ${errors.message}`)
+                notifyError(`Упс, ошибка , ${errors.message}`)
             })
     }
 
     useEffect(
         () => () => {
             // Make sure to revoke the data uris to avoid memory leaks
-            files.forEach(file => URL.revokeObjectURL(file.preview))
+            files.forEach((file) => URL.revokeObjectURL(file.preview))
         },
         [files]
     )
@@ -156,22 +149,21 @@ export default function ModalAdd({ show, closeModalAdd, addLayout }) {
                 className="modal-dialog-centered modal-lg"
             >
                 <ModalHeader toggle={toggleModal} className="bg-primary">
-                Добавление планировки
+                    Добавление планировки
                 </ModalHeader>
                 <ModalBody className="modal-dialog-centered">
                     <Formik
                         initialValues={{
-                            required: "",
-                            name: "",
-                            date: "",
-                            minlength: "",
-                            maxlength: ""
+                            required: '',
+                            name: '',
+                            date: '',
+                            minlength: '',
+                            maxlength: '',
                         }}
                         validationSchema={formSchema}
                     >
                         {({ errors, touched }) => (
                             <Form className="w-100" onSubmit={submitForm}>
-
                                 <Card>
                                     <CardBody className="rdt_Wrapper">
                                         <FormGroup className="my-3">
@@ -180,89 +172,154 @@ export default function ModalAdd({ show, closeModalAdd, addLayout }) {
                                                 name="floor"
                                                 id="required"
                                                 onChange={handleInput}
-                                                className={`form-control ${errors.required &&
+                                                className={`form-control ${
+                                                    errors.required &&
                                                     touched.required &&
-                                                    "is-invalid"}`}
+                                                    'is-invalid'
+                                                }`}
                                             />
-                                            {errors.required && touched.required ? (
-                                                <div className="invalid-tooltip mt-25">{errors.required}</div>
+                                            {errors.required &&
+                                            touched.required ? (
+                                                <div className="invalid-tooltip mt-25">
+                                                    {errors.required}
+                                                </div>
                                             ) : null}
                                         </FormGroup>
                                         <FormGroup className="my-3">
-                                            <Label for="required">Комнаты</Label>
+                                            <Label for="required">
+                                                Комнаты
+                                            </Label>
                                             <Field
                                                 name="rooms"
                                                 id="required"
                                                 onChange={handleInput}
-                                                className={`form-control ${errors.required &&
+                                                className={`form-control ${
+                                                    errors.required &&
                                                     touched.required &&
-                                                    "is-invalid"}`}
+                                                    'is-invalid'
+                                                }`}
                                             />
-                                            {errors.required && touched.required ? (
-                                                <div className="invalid-tooltip mt-25">{errors.required}</div>
+                                            {errors.required &&
+                                            touched.required ? (
+                                                <div className="invalid-tooltip mt-25">
+                                                    {errors.required}
+                                                </div>
                                             ) : null}
                                         </FormGroup>
                                         <FormGroup className="my-3">
-                                            <Label for="required">Жилой комплекс</Label>
-                                            <CustomInput type="select" name="select" id="city" onChange={e => { setPost({ ...post, residences: e.target.value }) }} >
-                                                <option value=""></option>
-                                                {
-                                                    groupRes?.map((el, index) => {
-                                                        return (
-                                                            <option value={el.id} key={index} >{el.name}</option>
-                                                        )
+                                            <Label for="required">
+                                                Жилой комплекс
+                                            </Label>
+                                            <CustomInput
+                                                type="select"
+                                                name="select"
+                                                id="city"
+                                                onChange={(e) => {
+                                                    setPost({
+                                                        ...post,
+                                                        residences:
+                                                            e.target.value,
                                                     })
-                                                }
+                                                }}
+                                            >
+                                                <option value=""></option>
+                                                {groupRes?.map((el, index) => {
+                                                    return (
+                                                        <option
+                                                            value={el.id}
+                                                            key={index}
+                                                        >
+                                                            {el.name}
+                                                        </option>
+                                                    )
+                                                })}
                                             </CustomInput>
                                         </FormGroup>
                                         <Label for="required">Блок</Label>
-                                        <CustomInput type="select" name="paragraph" id="city" onChange={handleInput}>
+                                        <CustomInput
+                                            type="select"
+                                            name="paragraph"
+                                            id="city"
+                                            onChange={handleInput}
+                                        >
                                             <option value=""></option>
-                                            {
-                                                layoutcategory?.map((el, index) => {
+                                            {layoutcategory?.map(
+                                                (el, index) => {
                                                     return (
-                                                        <option value={el.id} key={index}>{el.name}</option>
+                                                        <option
+                                                            value={el.id}
+                                                            key={index}
+                                                        >
+                                                            {el.name}
+                                                        </option>
                                                     )
-                                                })
-                                            }
+                                                }
+                                            )}
                                         </CustomInput>
                                         <FormGroup className="my-3">
-                                            <Label for="required">Квадратный метр</Label>
+                                            <Label for="required">
+                                                Квадратный метр
+                                            </Label>
                                             <Field
                                                 name="square"
                                                 id="required"
                                                 onChange={handleInput}
-                                                className={`form-control ${errors.required &&
+                                                className={`form-control ${
+                                                    errors.required &&
                                                     touched.required &&
-                                                    "is-invalid"}`}
+                                                    'is-invalid'
+                                                }`}
                                             />
-                                            {errors.required && touched.required ? (
-                                                <div className="invalid-tooltip mt-25">{errors.required}</div>
+                                            {errors.required &&
+                                            touched.required ? (
+                                                <div className="invalid-tooltip mt-25">
+                                                    {errors.required}
+                                                </div>
                                             ) : null}
                                         </FormGroup>
-
                                     </CardBody>
                                 </Card>
                                 <Card>
                                     <CardBody className="rdt_Wrapper">
                                         <section>
-                                            <div {...getRootProps({ className: "dropzone" })}>
-                                                <input {...getInputProps()} onChange={handleFileInput} />
+                                            <div
+                                                {...getRootProps({
+                                                    className: 'dropzone',
+                                                })}
+                                            >
+                                                <input
+                                                    {...getInputProps()}
+                                                    onChange={handleFileInput}
+                                                />
                                                 <p className="mx-1">
-                                                    Перетащите сюда файл или щелкните, чтобы выбрать файл
-                                            </p>
+                                                    Перетащите сюда файл или
+                                                    щелкните, чтобы выбрать файл
+                                                </p>
                                             </div>
                                             <aside className="thumb-container">
                                                 <div className="dz-thumb">
                                                     <div className="dz-thumb-inner">
-                                                        {preloadImg.image !== null ? <img src={preloadImg.image} className="dz-img" alt="dd" /> : null}
+                                                        {preloadImg.image !==
+                                                        null ? (
+                                                            <img
+                                                                src={
+                                                                    preloadImg.image
+                                                                }
+                                                                className="dz-img"
+                                                                alt="dd"
+                                                            />
+                                                        ) : null}
                                                     </div>
                                                 </div>
                                             </aside>
                                         </section>
                                     </CardBody>
                                 </Card>
-                                <Button.Ripple color="primary" type="submit" className="mt-2" >
+                                <Button.Ripple
+                                    color="primary"
+                                    type="submit"
+                                    className="mt-2"
+                                >
                                     Добавить
                                 </Button.Ripple>
                             </Form>
@@ -270,7 +327,6 @@ export default function ModalAdd({ show, closeModalAdd, addLayout }) {
                     </Formik>
                 </ModalBody>
             </Modal>
-
         </>
     )
 }

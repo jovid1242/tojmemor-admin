@@ -85,7 +85,7 @@ export default function ModalAdd({ show, closeModalAdd, addSale }) {
                 notifySuccess('Акция успешно добавлена!')
             })
             .catch(function (errors) {
-                notifyError(`О боже ошибка , ${errors.message}`)
+                notifyError(`Упс, ошибка , ${errors.message}`)
             })
     }
 

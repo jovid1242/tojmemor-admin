@@ -1,7 +1,7 @@
-import React from "react"
-import { Row, Col } from "reactstrap"
-import Breadcrumbs from "../../breadCrumbs/BreadCrumb"
-import Video from "./Index"
+import React from 'react'
+import { Row, Col } from 'reactstrap'
+import Breadcrumbs from '../../breadCrumbs/BreadCrumb'
+import Video from './Index'
 
 class DataTables extends React.Component {
     render() {
@@ -9,7 +9,7 @@ class DataTables extends React.Component {
             <React.Fragment>
                 <Breadcrumbs
                     breadCrumbTitle="Instagram"
-                    breadCrumbParent="Главный"
+                    breadCrumbParent="Главная"
                     breadCrumbActive="Instagram"
                 />
                 <Row>

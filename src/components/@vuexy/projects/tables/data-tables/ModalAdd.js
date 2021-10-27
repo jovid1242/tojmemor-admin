@@ -103,7 +103,7 @@ export default function ModalAdd({ show, closeModalAdd, addProjects }) {
                 notifySuccess('Проект успешно добавлен!')
             })
             .catch(function (errors) {
-                notifyError(`О боже ошибка , ${errors.message}`)
+                notifyError(`Упс, ошибка , ${errors.message}`)
             })
     }
     const thumbs = files.map((file) => (

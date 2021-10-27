@@ -86,7 +86,7 @@ export default function ModalAdd({ show, closeModalAdd, addUser }) {
                 notifySuccess('Ползователь успешно добавлен!')
             })
             .catch(function (errors) {
-                notifyError(`О боже ошибка , ${errors.message}`)
+                notifyError(`Упс, ошибка, ${errors.message}`)
             })
     }
 

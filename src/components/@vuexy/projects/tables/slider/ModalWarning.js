@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import http from '../../../../../http'
 import { toast } from 'react-toastify'
 
-export default function ModalWarning({ show, closeModal, id, deleteNews }) {
+export default function ModalWarning({ show, closeModal, id, deleteProjects }) {
     const notifyWarning = (txt) => toast.warning(txt)
     const notifySuccess = (txt) => toast.success(txt)
     const toggleModal = () => {
@@ -13,13 +13,13 @@ export default function ModalWarning({ show, closeModal, id, deleteNews }) {
         closeModal(true)
     }
     const submitForm = (e) => {
-        deleteNews(id)
-        http.delete(`/news/delete/${id}`)
+        deleteProjects(id)
+        http.delete(`pr_slider/delete/${id}`)
             .then((res) => {
-                notifySuccess('Новость успешно удалена')
+                notifySuccess('Картинка была успешно удалена!')
             })
             .catch(function (errors) {
-                notifyWarning(`Ошибка , ${errors.message}`)
+                notifyWarning(`Ошибка: ${errors.message}`)
             })
     }
     return (
@@ -33,7 +33,7 @@ export default function ModalWarning({ show, closeModal, id, deleteNews }) {
                     Внимание
                 </ModalHeader>
                 <ModalBody className="modal-dialog-centered">
-                    Вы уверены, что хотите удалить эту новость?
+                    Вы уверены, что хотите удалить этот проект?
                 </ModalBody>
                 <ModalFooter>
                     <Button

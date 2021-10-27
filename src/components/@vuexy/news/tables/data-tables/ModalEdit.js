@@ -132,7 +132,7 @@ export default function ModalEdit({ show, closeModalEdit, editNews, news }) {
             .then((response) => {
                 toggleModal()
                 editNews(post, preloadImg.image)
-                notifySuccess('Новость успешно изменено!')
+                notifySuccess('Новость успешно изменена')
             })
             .catch(function (errors) {
                 notifyError(`О нет, ${errors.message}`)

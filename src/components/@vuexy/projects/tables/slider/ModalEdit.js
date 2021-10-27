@@ -5,16 +5,13 @@ import {
     ModalHeader,
     ModalBody,
     Card,
-    CardHeader,
-    CardTitle,
+    CustomInput,
     CardBody,
     FormGroup,
     Label,
-    CustomInput,
 } from 'reactstrap'
 import { EditorState, convertToRaw, ContentState } from 'draft-js'
 import draftToHtml from 'draftjs-to-html'
-import { Editor } from 'react-draft-wysiwyg'
 import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
 import { useDropzone } from 'react-dropzone'
@@ -24,6 +21,7 @@ import '../../../../../assets/scss/plugins/extensions/dropzone.scss'
 import http from '../../../../../http'
 import FormData from 'form-data'
 import { toast } from 'react-toastify'
+import htmlToDraft from 'html-to-draftjs'
 
 const formSchema = Yup.object().shape({
     required: Yup.string().required('Required'),
@@ -31,38 +29,40 @@ const formSchema = Yup.object().shape({
     maxlength: Yup.string().max(5, 'Too Long!').required('Required'),
 })
 
-export default function ModalAdd({ show, closeModalAdd, addCareer }) {
+export default function ModalEdit({
+    show,
+    closeModalEdit,
+    editProjects,
+    project,
+    projects,
+}) {
     const notifySuccess = (txt) => toast.success(txt)
     const notifyError = (txt) => toast.error(txt)
-    // const notifyDefault = (txt) => toast(txt)
-    // const notifyInfo = (txt) => toast.info(txt)
-    // const notifyWarning = (txt) => toast.warning(txt)
     const [files, setFiles] = useState([])
-    const [title, setTitle] = useState([])
+    const [edit, setEdit] = useState({
+        editorState: EditorState.createEmpty(),
+    })
     const [preloadImg, setpreloadImg] = useState({ image: null })
-    const [imageFile, setImageFile] = useState({
-        file: null,
-    })
     const [post, setPost] = useState({
+        id: null,
+        project_id: null,
         file: null,
-        title: null,
-        text: null,
-        address: null,
     })
+
+    useEffect(() => {
+        setPost({
+            id: project.id,
+            project_id: project.project_id,
+            file: project.image,
+        })
+        setpreloadImg({ image: project.image })
+    }, [project])
 
     const toggleModal = () => {
         if (show) {
-            closeModalAdd(false)
+            closeModalEdit(false)
         }
-        closeModalAdd(true)
-    }
-
-    const handleInput = (e) => {
-        const name = e.target.name
-        const value = e.target.value
-        const data = post
-        data[name] = value
-        setPost(data)
+        closeModalEdit(true)
     }
 
     const handleFileInput = (e) => {
@@ -91,23 +91,26 @@ export default function ModalAdd({ show, closeModalAdd, addCareer }) {
     const submitForm = (e) => {
         e.preventDefault()
         const data = new FormData()
-        data.append('title', post.title)
-        data.append('text', post.text)
-        data.append('address', post.address)
-        data.append('file', post.file)
-        // addCareer(post)
-        http.post('/create_career', data)
+        data.append('project_id', post.project_id)
+        data.append('image', post.file)
+        http.put(`pr_slider/update/${post.id}`, data)
             .then((response) => {
-                addCareer(post.title, post.text, post.address, preloadImg.image)
+                editProjects(post, preloadImg.image)
                 toggleModal()
-                notifySuccess(' Карьера успешно добавлена!')
-                // console.log(response.data);
-                // setPost(response.data.news)
+                notifySuccess('Картинка успешно изменена!')
             })
             .catch(function (errors) {
-                notifyError(`Упс, ошибка , ${errors.message}`)
+                notifyError(`О нет ошибка , ${errors.message}`)
             })
     }
+
+    const thumbs = files.map((file) => (
+        <div className="dz-thumb" key={file.name}>
+            <div className="dz-thumb-inner">
+                <img src={file.preview} className="dz-img" alt={file.name} />
+            </div>
+        </div>
+    ))
 
     useEffect(
         () => () => {
@@ -125,7 +128,7 @@ export default function ModalAdd({ show, closeModalAdd, addCareer }) {
                 className="modal-dialog-centered modal-lg"
             >
                 <ModalHeader toggle={toggleModal} className="bg-primary">
-                    Добавление карьеры
+                    Редактирование проекта
                 </ModalHeader>
                 <ModalBody className="modal-dialog-centered">
                     <Formik
@@ -144,64 +147,32 @@ export default function ModalAdd({ show, closeModalAdd, addCareer }) {
                                     <CardBody className="rdt_Wrapper">
                                         <FormGroup className="my-3">
                                             <Label for="required">
-                                                Заголовок
+                                                Жилой комплекс
                                             </Label>
-                                            <Field
-                                                name="title"
-                                                id="required"
-                                                onChange={handleInput}
-                                                className={`form-control ${
-                                                    errors.required &&
-                                                    touched.required &&
-                                                    'is-invalid'
-                                                }`}
-                                            />
-                                            {errors.required &&
-                                            touched.required ? (
-                                                <div className="invalid-tooltip mt-25">
-                                                    {errors.required}
-                                                </div>
-                                            ) : null}
-                                        </FormGroup>
-                                        <FormGroup className="my-3">
-                                            <Label for="required">
-                                                Описание
-                                            </Label>
-                                            <Field
-                                                name="text"
-                                                id="required"
-                                                onChange={handleInput}
-                                                className={`form-control ${
-                                                    errors.required &&
-                                                    touched.required &&
-                                                    'is-invalid'
-                                                }`}
-                                            />
-                                            {errors.required &&
-                                            touched.required ? (
-                                                <div className="invalid-tooltip mt-25">
-                                                    {errors.required}
-                                                </div>
-                                            ) : null}
-                                        </FormGroup>
-                                        <FormGroup className="my-3">
-                                            <Label for="required">Адрес</Label>
-                                            <Field
-                                                name="address"
-                                                id="required"
-                                                onChange={handleInput}
-                                                className={`form-control ${
-                                                    errors.required &&
-                                                    touched.required &&
-                                                    'is-invalid'
-                                                }`}
-                                            />
-                                            {errors.required &&
-                                            touched.required ? (
-                                                <div className="invalid-tooltip mt-25">
-                                                    {errors.required}
-                                                </div>
-                                            ) : null}
+                                            <CustomInput
+                                                type="select"
+                                                name="select"
+                                                id="city"
+                                                onChange={(e) => {
+                                                    setPost({
+                                                        ...post,
+                                                        project_id:
+                                                            e.target.value,
+                                                    })
+                                                }}
+                                            >
+                                                <option value=""></option>
+                                                {projects?.map((el, index) => {
+                                                    return (
+                                                        <option
+                                                            value={el.id}
+                                                            key={index}
+                                                        >
+                                                            {el.title}
+                                                        </option>
+                                                    )
+                                                })}
+                                            </CustomInput>
                                         </FormGroup>
                                     </CardBody>
                                 </Card>
@@ -241,12 +212,13 @@ export default function ModalAdd({ show, closeModalAdd, addCareer }) {
                                         </section>
                                     </CardBody>
                                 </Card>
+
                                 <Button.Ripple
                                     color="primary"
                                     type="submit"
                                     className="mt-2"
                                 >
-                                    Добавить
+                                    Изменить
                                 </Button.Ripple>
                             </Form>
                         )}

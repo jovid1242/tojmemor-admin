@@ -53,7 +53,6 @@ export default function Index() {
     }
 
     const editProjects = (el, file) => {
-        // console.log(el);
         let index = post.findIndex((element) => element.id === el.id)
         post[index].title = el.title
         post[index].text = el.text

@@ -22,10 +22,21 @@ const horizontalMenuConfig = [
     {
         id: 'projects',
         title: 'Проекты',
-        type: 'item',
+        type: 'collapse',
         icon: <Icon.Clipboard size={20} />,
         permissions: ['admin', 'editor'],
         navLink: '/pages/projects',
+        children: [
+            {
+                id: 'projects_1',
+                title: 'Проекты',
+                type: 'item',
+                icon: <Icon.BookOpen size={20} />,
+                permissions: ['admin', 'editor'],
+                navLink: '/pages/projects',
+                role: ['admin'],
+            },
+        ],
     },
     {
         id: 'video',

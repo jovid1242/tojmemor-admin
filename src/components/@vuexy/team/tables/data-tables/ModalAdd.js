@@ -85,7 +85,7 @@ export default function ModalAdd({ show, closeModalAdd, addTeam }) {
                 notifySuccess('Соотрудник успешно добавлен!')
             })
             .catch(function (errors) {
-                notifyError(`О боже ошибка , ${errors.message}`)
+                notifyError(`Упс, ошибка, ${errors.message}`)
             })
     }
 
@@ -130,8 +130,7 @@ export default function ModalAdd({ show, closeModalAdd, addTeam }) {
                                                 onChange={(e) =>
                                                     setPost({
                                                         ...post,
-                                                        name:
-                                                            e.target.value,
+                                                        name: e.target.value,
                                                     })
                                                 }
                                                 className={`form-control ${

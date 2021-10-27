@@ -106,7 +106,7 @@ export default function ModalAdd({ show, closeModalAdd, addNews }) {
                 notifySuccess('Новость успешно добавлен!')
             })
             .catch(function (errors) {
-                notifyError(`О боже ошибка , ${errors.message}`)
+                notifyError(`Упс, ошибка, ${errors.message}`)
             })
     }
 

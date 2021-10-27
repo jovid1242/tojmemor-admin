@@ -88,7 +88,7 @@ export default function ModalAdd({ show, closeModalAdd, addSlider }) {
                 // setPost(response.data.news)
             })
             .catch(function (errors) {
-                notifyError(`О боже ошибка , ${errors.message}`)
+                notifyError(`Упс, ошибка , ${errors.message}`)
             })
     }
 
