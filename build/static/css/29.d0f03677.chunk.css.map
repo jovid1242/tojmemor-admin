@@ -1,1 +1,0 @@
-{"version":3,"sources":["Index.css"],"names":[],"mappings":"AAAA,WACE,UAAW,CACX,WAAY,CAEZ,gBACF,CALA,iBAGE,kBAEF","file":"29.d0f03677.chunk.css","sourcesContent":[".img__news {\r\n  width: 80px;\r\n  height: 80px;\r\n  border-radius: 14px;\r\n  object-fit: cover;\r\n}\r\n"]}
